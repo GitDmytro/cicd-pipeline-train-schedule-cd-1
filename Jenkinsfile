@@ -1,18 +1,20 @@
 pipeline {
     agent any
     stages {
-stage('DeployToStaging') {
+        stage('DeployToProduction') {
             when {
                 branch 'master'
             }
             steps {
+                input 'Does the staging environment look OK?'
+                milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     sshPublisher(
                         failOnError: true,
                         continueOnError: false,
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'staging',
+                                configName: 'Production Server',
                                 sshCredentials: [
                                     username: "$USERNAME",
                                     encryptedPassphrase: "$USERPASS"
@@ -30,6 +32,6 @@ stage('DeployToStaging') {
                     )
                 }
             }
-        }
+        }  
     }
 }
