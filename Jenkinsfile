@@ -1,3 +1,6 @@
+pipeline {
+    agent any
+    stages {
 stage('DeployToStaging') {
             when {
                 branch 'master'
@@ -9,7 +12,7 @@ stage('DeployToStaging') {
                         continueOnError: false,
                         publishers: [
                             sshPublisherDesc(
-                                configName: 'Staging Server',
+                                configName: 'staging',
                                 sshCredentials: [
                                     username: "$USERNAME",
                                     encryptedPassphrase: "$USERPASS"
@@ -28,3 +31,5 @@ stage('DeployToStaging') {
                 }
             }
         }
+    }
+}
